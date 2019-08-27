@@ -3,7 +3,7 @@
 ### Author: Gina Pultorak, Joanna Arroyo
 
 ### Links and Resources
-* [submission PR](https://github.com/ginapult-401-advanced-javascript/lab-11-authentication/pull/6)
+* [submission PR](https://github.com/ginapult-401-advanced-javascript/lab-11-authentication/pull/8)
 * [travis](https://travis-ci.com/ginapult-401-advanced-javascript/lab-11-authentication)
 
 #### Documentation

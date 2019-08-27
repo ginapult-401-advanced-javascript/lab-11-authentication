@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: pol.js</title>
+    <title>JSDoc: Source: src/middleware/error.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: pol.js</h1>
+    <h1 class="page-title">Source: src/middleware/error.js</h1>
 
     
 
@@ -27,23 +27,27 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>'use strict';
-
 /**
- * Proof Of Life
- * @module pol
+ * API Server Module
+ * @module src/auth/error
  */
 
 /**
- * Proof of life - will return a boolean value
- * @param dead
- * @returns {boolean}
- * @function isAlive
+ * Error handling middleware
+ * @param err
+ * @param req
+ * @param res
+ * @param next
  */
-const isAlive = function(dead = false) {
-  return !(dead);
+module.exports = (err, req, res, next) => {
+  console.error('__SERVER_ERROR__', err);
+  let error = { error: err.message || err };
+  res.statusCode = err.status || 500;
+  res.statusMessage = err.statusMessage || 'Server Error';
+  res.setHeader('Content-Type', 'application/json');
+  res.write( JSON.stringify(error) );
+  res.end();
 };
-
-module.exports = {isAlive};
 </code></pre>
         </article>
     </section>

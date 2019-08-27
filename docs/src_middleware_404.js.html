@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: pol.js</title>
+    <title>JSDoc: Source: src/middleware/404.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: pol.js</h1>
+    <h1 class="page-title">Source: src/middleware/404.js</h1>
 
     
 
@@ -27,24 +27,25 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>'use strict';
-
 /**
- * Proof Of Life
- * @module pol
+ * API Server Module
+ * @module src/auth/404
  */
 
 /**
- * Proof of life - will return a boolean value
- * @param dead
- * @returns {boolean}
- * @function isAlive
+ * Middleware to send error message when resource not found
+ * @param req
+ * @param res
+ * @param next
  */
-const isAlive = function(dead = false) {
-  return !(dead);
-};
-
-module.exports = {isAlive};
-</code></pre>
+module.exports = (req,res,next) => {
+  let error = { error: 'Resource Not Found' };
+  res.statusCode = 404;
+  res.statusMessage = 'Not Found';
+  res.setHeader('Content-Type', 'application/json');
+  res.write(JSON.stringify(error));
+  res.end();
+};</code></pre>
         </article>
     </section>
 

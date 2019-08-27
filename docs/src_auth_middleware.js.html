@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: pol.js</title>
+    <title>JSDoc: Source: src/auth/middleware.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: pol.js</h1>
+    <h1 class="page-title">Source: src/auth/middleware.js</h1>
 
     
 
@@ -27,23 +27,62 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>'use strict';
-
 /**
- * Proof Of Life
- * @module pol
+ * API Server Module
+ * @module src/auth/middleware
  */
 
-/**
- * Proof of life - will return a boolean value
- * @param dead
- * @returns {boolean}
- * @function isAlive
- */
-const isAlive = function(dead = false) {
-  return !(dead);
+const User = require('./users-model.js');
+
+module.exports = (request, response, next) => {
+  try {
+    let [type, authString] = request.headers.authorization.split(' ');
+
+    if(type === 'Basic') {
+      return _authBasic(authString);
+    } else {
+      return _authError();
+    }
+  } catch (error) {
+    return _authError();
+  }
+
+  /**
+   * This function will parse basic authentication
+   * @param authString
+   * @private
+   */
+  function _authBasic(authString) {
+    let base64Buffer = Buffer.from(authString,'base64'); // &lt;Buffer 01 02...>
+    let bufferString = base64Buffer.toString(); // john:mysecret
+    let [username,password] = bufferString.split(':');  // variables username="john" and password="mysecret"
+    let userSignIn = {username,password};  // {username:"john", password:"mysecret"}
+
+    return User.authenticateBasic(userSignIn)
+      .then( user => _authenticate(user) );
+  }
+
+  /**
+   * Here I have either user or false/null/falsy
+   * @param user 
+   * @private
+   */
+  function _authenticate(user) {
+    if ( user ) {
+      request.user = user;
+      request.token = user.generateToken();// this token will be used in any other request
+      next();
+    } else {
+      return _authError();
+    }
+  }
+
+  function _authError() {
+    next({status: 401, statusMessage: 'Unauthorized', message: 'Invalid User ID/Password'});
+  }
+
 };
 
-module.exports = {isAlive};
 </code></pre>
         </article>
     </section>

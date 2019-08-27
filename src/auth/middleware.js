@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * API Server Module
+ * @module src/auth/middleware
+ */
 
 const User = require('./users-model.js');
 

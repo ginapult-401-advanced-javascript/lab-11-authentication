@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * API Server Module
+ * @module src/auth/users-model
+ */
 
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
